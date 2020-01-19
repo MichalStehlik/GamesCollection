@@ -20,6 +20,7 @@ namespace GamesCollection.Pages
         public string CountrySort { get; set; }
         public string CurrentNameFilter { get; set; }
         public string CurrentCountryFilter { get; set; }
+        public string CurrentOwnerFilter { get; set; }
         public string CurrentSort { get; set; }
         public IList<Company> Companies { get; set; }
         public SelectList CountriesList { get; set; }
@@ -29,7 +30,7 @@ namespace GamesCollection.Pages
             _context = context;
         }
 
-        public async Task OnGet(string order, string search, string nameFilter, string countryFilter, int? ownerFilter = 0)
+        public async Task OnGet(string order, string search, string nameFilter, string countryFilter, int? ownerFilter = null)
         {
             CountriesList = new SelectList(new List<string> { 
                 "CZ", "FR", "GE", "PL", "SE", "US"
