@@ -1,0 +1,60 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Game Companies Directory</h1>
+    <p>This page lists some of video games developers and publishers.</p>
+</div>
+
+<ul>
+    <li>All companies</li>
+    <li>Companies not owned by anyone else</li>
+    <li>Companies from United States, France, Czechia, Poland, Sweden, Germany</li>
+</ul>
+
+<form asp-page="./Index" method="get" class="form-inline">
+    <label class="sr-only" for="Search">Search</label>
+    <input type="text" name="Search" class="form-control mb-2 mr-sm-2" value="@Model.CurrentNameFilter" />
+    <select name="CountryFilter" class="form-control mb-2 mr-sm-2" asp-for="@Model.CurrentCountryFilter" asp-items="@Model.CountriesList">
+        <option value="">-- any --</option>
+    </select>
+    <input type="submit" value="Search" class="btn btn-primary mb-2 mr-1" /> <a asp-page="./Index" class="btn btn-secondary mb-2">All</a>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./Index" asp-route-order="@Model.NameSort" asp-route-nameFilter="@Model.CurrentNameFilter" asp-route-countryFilter="@Model.CurrentCountryFilter">
+                    @Html.DisplayNameFor(model => model.Companies[0].Name)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-order="@Model.CountrySort" asp-route-nameFilter="@Model.CurrentNameFilter" asp-route-countryFilter="@Model.CurrentCountryFilter">
+                    @Html.DisplayNameFor(model => model.Companies[0].CountryCode)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Companies)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CountryCode)
+                </td>
+                <td>
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-page="./Index" asp-route-ownedFilter="@item.Id">Subsidiaries</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
