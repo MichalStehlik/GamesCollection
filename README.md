@@ -1,6 +1,6 @@
 # GamesCollection
 
-Zadání pro cvičení z Webů. Pracujte čistě pomocí LINQ metod a Entity Frameworku. Na základě poskytnutého kódu vytvořte část aplikace seznamu herních společností.
+Zadání pro cvičení z Webů. Pracujte čistě pomocí LINQ metod a Entity Frameworku. Na základě poskytnutého kódu vytvořte část aplikace obsahující seznam herních společností.
 Důležité je udělat kód pro akce, ten pak provádět prostřednictvím parametrů URL, následně je možné dokončit UI.
 
 Vytvořte:
