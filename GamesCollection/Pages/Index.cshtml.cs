@@ -16,12 +16,6 @@ namespace GamesCollection.Pages
         private readonly ILogger<IndexModel> _logger;
         private ApplicationDbContext _context;
 
-        public string NameSort { get; set; }
-        public string CountrySort { get; set; }
-        public string CurrentNameFilter { get; set; }
-        public string CurrentCountryFilter { get; set; }
-        public string CurrentOwnerFilter { get; set; }
-        public string CurrentSort { get; set; }
         public IList<Company> Companies { get; set; }
         public SelectList CountriesList { get; set; }
         public IndexModel(ApplicationDbContext context, ILogger<IndexModel> logger)
@@ -36,7 +30,7 @@ namespace GamesCollection.Pages
                 "CZ", "FR", "GE", "PL", "SE", "US"
             });
             IQueryable<Company> companies = _context.Companies;
-            Companies = await companies.AsNoTracking().ToListAsync();
+            Companies = new List<Company>();
         }
     }
 }
