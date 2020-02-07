@@ -15,7 +15,7 @@ namespace GamesCollection.Models
         public string Description { get; set; }
         public string Website { get; set; }
         public string YouTubeChannel { get; set; }
-        public ICollection<GameGenre> Genres { get; set; }
+        public ICollection<GameGenre> GameGenres { get; set; }
         public Company Developer { get; set; }
         public Company Publisher { get; set; }
         public int DeveloperId { get; set; }

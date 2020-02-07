@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GamesCollection.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200206204821_AddingGames")]
-    partial class AddingGames
+    [Migration("20200207144730_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -83,7 +83,7 @@ namespace GamesCollection.Migrations
                             Id = 5,
                             CountryCode = "US",
                             Name = "BioWare",
-                            ParentId = 3,
+                            ParentId = 4,
                             Website = "https://bioware.com/"
                         },
                         new
@@ -170,7 +170,7 @@ namespace GamesCollection.Migrations
                             CountryCode = "US",
                             Name = "Obsidian Entertainment",
                             ParentId = 2,
-                            Website = "https://www.firaxis.com/"
+                            Website = "https://www.obsidian.net"
                         },
                         new
                         {
@@ -285,6 +285,12 @@ namespace GamesCollection.Migrations
                     b.Property<int>("DeveloperId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("GameGenreGameId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GameGenreGenreId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -303,6 +309,8 @@ namespace GamesCollection.Migrations
                     b.HasIndex("DeveloperId");
 
                     b.HasIndex("PublisherId");
+
+                    b.HasIndex("GameGenreGameId", "GameGenreGenreId");
 
                     b.ToTable("Games");
 
@@ -504,11 +512,19 @@ namespace GamesCollection.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("GameGenreGameId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GameGenreGenreId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GameGenreGameId", "GameGenreGenreId");
 
                     b.ToTable("Genres");
 
@@ -598,38 +614,49 @@ namespace GamesCollection.Migrations
             modelBuilder.Entity("GamesCollection.Models.Company", b =>
                 {
                     b.HasOne("GamesCollection.Models.Company", "Parent")
-                        .WithMany()
+                        .WithMany("Subsidiaries")
                         .HasForeignKey("ParentId");
                 });
 
             modelBuilder.Entity("GamesCollection.Models.Game", b =>
                 {
                     b.HasOne("GamesCollection.Models.Company", "Developer")
-                        .WithMany()
+                        .WithMany("DevelopedGames")
                         .HasForeignKey("DeveloperId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("GamesCollection.Models.Company", "Publisher")
-                        .WithMany()
+                        .WithMany("PublishedGames")
                         .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("GamesCollection.Models.GameGenre", null)
+                        .WithMany("Games")
+                        .HasForeignKey("GameGenreGameId", "GameGenreGenreId");
                 });
 
             modelBuilder.Entity("GamesCollection.Models.GameGenre", b =>
                 {
                     b.HasOne("GamesCollection.Models.Game", "Game")
-                        .WithMany("Genres")
+                        .WithMany("GameGenres")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GamesCollection.Models.Genre", "Genre")
-                        .WithMany()
+                        .WithMany("GameGenres")
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("GamesCollection.Models.Genre", b =>
+                {
+                    b.HasOne("GamesCollection.Models.GameGenre", null)
+                        .WithMany("Genres")
+                        .HasForeignKey("GameGenreGameId", "GameGenreGenreId");
                 });
 #pragma warning restore 612, 618
         }

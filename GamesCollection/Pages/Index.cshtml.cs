@@ -17,18 +17,35 @@ namespace GamesCollection.Pages
         private ApplicationDbContext _context;
 
         public IList<Company> Companies { get; set; }
-        public SelectList CountriesList { get; set; }
+        public IList<SelectListItem> CountriesList { get; set; }
+
+        [BindProperty]
+        public string Order { get; set; }
+        [BindProperty]
+        public string Search { get; set; }
+        [BindProperty]
+        public string NameFilter { get; set; }
+        [BindProperty]
+        public string CountryFilter { get; set; }
+        [BindProperty]
+        public int OwnerFilter { get; set; }
         public IndexModel(ApplicationDbContext context, ILogger<IndexModel> logger)
         {
             _logger = logger;
             _context = context;
         }
 
-        public async Task OnGet(string order, string search, string nameFilter, string countryFilter, int? ownerFilter = null)
+        public void OnGet()
         {
-            CountriesList = new SelectList(new List<string> { 
-                "CZ", "FR", "GE", "PL", "SE", "US"
-            });
+            CountriesList = new List<SelectListItem> {
+                new SelectListItem { Text = "CZ", Value = "CZ"},
+                new SelectListItem { Text = "FR", Value = "FR"},
+                new SelectListItem { Text = "GE", Value = "GE"},
+                new SelectListItem { Text = "PL", Value = "PL"},
+                new SelectListItem { Text = "SE", Value = "SE"},
+                new SelectListItem { Text = "US", Value = "US"},
+                new SelectListItem { Text = "CA", Value = "CA"},
+            };
             IQueryable<Company> companies = _context.Companies;
             Companies = new List<Company>();
         }

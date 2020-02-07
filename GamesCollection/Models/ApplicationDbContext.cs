@@ -17,7 +17,21 @@ namespace GamesCollection.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Game>(entity =>
+            {
+                entity.HasOne(g => g.Publisher).WithMany(c => c.PublishedGames).HasForeignKey(c => c.PublisherId).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(g => g.Developer).WithMany(c => c.DevelopedGames).HasForeignKey(c => c.DeveloperId).OnDelete(DeleteBehavior.Restrict);
+                entity.HasMany(g => g.GameGenres).WithOne(gg => gg.Game).HasForeignKey(gg => gg.GameId);
+            });
+            modelBuilder.Entity<Genre>(entity =>
+            {
+                entity.HasMany(g => g.GameGenres).WithOne(gg => gg.Genre).HasForeignKey(gg => gg.GenreId);
+            });
+
             modelBuilder.Entity<GameGenre>().HasKey(gg => new { gg.GameId, gg.GenreId });
+
+            #region Seed databáze
             modelBuilder.Entity<Genre>().HasData(new Genre { Id = 1, Name = "Role-playing" });
             modelBuilder.Entity<Genre>().HasData(new Genre { Id = 2, Name = "Adventure" });
             modelBuilder.Entity<Genre>().HasData(new Genre { Id = 3, Name = "Shooter" });
@@ -38,7 +52,7 @@ namespace GamesCollection.Models
             modelBuilder.Entity<Company>().HasData(new Company { Id = 2, Name = "Xbox Game Studios", CountryCode = "US", Website = "https://xbox.com/en-US/xbox-game-studios/" });
             modelBuilder.Entity<Company>().HasData(new Company { Id = 3, Name = "CD Projekt", CountryCode = "PL", Website = "https://cdprojekt.com/" });
             modelBuilder.Entity<Company>().HasData(new Company { Id = 4, Name = "Electronic Arts", CountryCode = "US", Website = "https://ea.com/" });
-            modelBuilder.Entity<Company>().HasData(new Company { Id = 5, Name = "BioWare", CountryCode = "US", Website = "https://bioware.com/", ParentId = 3 });
+            modelBuilder.Entity<Company>().HasData(new Company { Id = 5, Name = "BioWare", CountryCode = "US", Website = "https://bioware.com/", ParentId = 4 });
             modelBuilder.Entity<Company>().HasData(new Company { Id = 6, Name = "ZeniMax Media", CountryCode = "US", Website = "https://zenimax.com/" });
             modelBuilder.Entity<Company>().HasData(new Company { Id = 7, Name = "Arkane Studios", CountryCode = "FR", Website = "https://arkane-studios.com/", ParentId = 6 });
             modelBuilder.Entity<Company>().HasData(new Company { Id = 8, Name = "Bethesda Softworks", CountryCode = "US", Website = "https://bethesda.com/", ParentId = 6 });
@@ -49,7 +63,7 @@ namespace GamesCollection.Models
             modelBuilder.Entity<Company>().HasData(new Company { Id = 13, Name = "2K Games", CountryCode = "US", Website = "https://2k.com", ParentId = 1 });
             modelBuilder.Entity<Company>().HasData(new Company { Id = 14, Name = "Rockstar Games", CountryCode = "US", Website = "https://rockstargames.com", ParentId = 1 });
             modelBuilder.Entity<Company>().HasData(new Company { Id = 15, Name = "Firaxis Games", CountryCode = "US", Website = "https://www.firaxis.com/", ParentId = 13 });
-            modelBuilder.Entity<Company>().HasData(new Company { Id = 16, Name = "Obsidian Entertainment", CountryCode = "US", Website = "https://www.firaxis.com/", ParentId = 2 });
+            modelBuilder.Entity<Company>().HasData(new Company { Id = 16, Name = "Obsidian Entertainment", CountryCode = "US", Website = "https://www.obsidian.net", ParentId = 2 });
             modelBuilder.Entity<Company>().HasData(new Company { Id = 17, Name = "Paradox Interactive", CountryCode = "SE", Website = "https://www.paradoxplaza.com/"});
             modelBuilder.Entity<Company>().HasData(new Company { Id = 18, Name = "Hardsuit Labs", CountryCode = "US", Website = "https://www.hardsuitlabs.com/", ParentId = 17 });
             modelBuilder.Entity<Company>().HasData(new Company { Id = 19, Name = "Focus Home Interactive", CountryCode = "FR", Website = "http://focus-home.com/" });
@@ -89,6 +103,7 @@ namespace GamesCollection.Models
             modelBuilder.Entity<Game>().HasData(new Game { Id = 9, Name = "The Witcher 3: Wild Hunt", Description = "<p>The Witcher: Wild Hunt is a story-driven, next-generation open world role-playing game set in a visually stunning fantasy universe full of meaningful choices and impactful consequences. In The Witcher you play as the professional monster hunter, Geralt of Rivia, tasked with finding a child of prophecy in a vast open world rich with merchant cities, viking pirate islands, dangerous mountain passes, and forgotten caverns to explore.</p>", Website = "https://dishonored.bethesda.net/", YouTubeChannel = "https://www.youtube.com/user/WitcherGame", PublisherId = 3, DeveloperId = 26 });
             modelBuilder.Entity<GameGenre>().HasData(new GameGenre { GameId = 9, GenreId = 2 });
             modelBuilder.Entity<GameGenre>().HasData(new GameGenre { GameId = 9, GenreId = 1 });
+            #endregion
         }
     }
 }

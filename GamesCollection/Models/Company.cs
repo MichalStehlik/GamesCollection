@@ -18,5 +18,8 @@ namespace GamesCollection.Models
         public string CountryCode { get; set; }
         public int? ParentId { get; set; }
         public Company Parent { get; set; }
+        public ICollection<Company> Subsidiaries { get; set; }
+        public ICollection<Game> PublishedGames { get; set; }
+        public ICollection<Game> DevelopedGames { get; set; }
     }
 }

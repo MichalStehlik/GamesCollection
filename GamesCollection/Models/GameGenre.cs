@@ -11,5 +11,7 @@ namespace GamesCollection.Models
         public Game Game { get; set; }
         public int GenreId { get; set; }
         public Genre Genre { get; set; }
+        public ICollection<Game> Games { get; set; }
+        public ICollection<Genre> Genres { get; set; }
     }
 }
