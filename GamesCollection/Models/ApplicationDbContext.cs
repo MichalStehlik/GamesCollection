@@ -20,8 +20,8 @@ namespace GamesCollection.Models
 
             modelBuilder.Entity<Game>(entity =>
             {
-                entity.HasOne(g => g.Publisher).WithMany(c => c.PublishedGames).HasForeignKey(c => c.PublisherId).OnDelete(DeleteBehavior.Restrict);
-                entity.HasOne(g => g.Developer).WithMany(c => c.DevelopedGames).HasForeignKey(c => c.DeveloperId).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(g => g.Publisher).WithMany(c => c.PublishedGames).HasForeignKey(g => g.PublisherId).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(g => g.Developer).WithMany(c => c.DevelopedGames).HasForeignKey(g => g.DeveloperId).OnDelete(DeleteBehavior.Restrict);
                 entity.HasMany(g => g.GameGenres).WithOne(gg => gg.Game).HasForeignKey(gg => gg.GameId);
             });
             modelBuilder.Entity<Genre>(entity =>
